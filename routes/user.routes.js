@@ -7,11 +7,12 @@ const router = express.Router() //especifico que voy a usar de la libreria
 const usercontroller = require('../controllers/user.controller')
 
 /* (ruta de partida , metodo que vamos a utilizar) */
-router.get('/users/', usercontroller.getAllUsers)
+router.get('/getusers/', usercontroller.getAllUsers)
+router.get('/users/', usercontroller.loginUser)
 router.get('/users/:id', usercontroller.getUser)
 router.post('/users/', usercontroller.createUser)
 router.put('/users/:id', usercontroller.updateUser)
-router.delete('/users/:id',usercontroller.deleteUser)
+router.delete('/users/:id', usercontroller.deleteUser)
 // "/" punto de partida
 
 module.exports = router

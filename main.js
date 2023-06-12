@@ -11,7 +11,7 @@ app.use(cors())
 connectDB()
 
 // crear puerto
-const port =9000
+const port = 9000
 
 const userRoute = require('./routes/user.routes')
 const carRoute = require('./routes/car.routes')
@@ -23,8 +23,5 @@ app.use(express.json())
 app.use('/api', userRoute)
 app.use('/api', carRoute)
 
-
 //transfomrar el servidor
-app.listen(port, () =>
-  console.log(`el servidor se ejecuta en el pueto http://localhost${port}`)
-)
+app.listen(port, () => console.log(`el servidor se ejecuta en el pueto http://localhost${port}`))
