@@ -8,7 +8,7 @@ const usercontroller = require('../controllers/user.controller')
 
 /* (ruta de partida , metodo que vamos a utilizar) */
 router.get('/getusers/', usercontroller.getAllUsers)
-router.get('/users/', usercontroller.loginUser)
+router.post('/users/login', usercontroller.loginUser)
 router.get('/users/:id', usercontroller.getUser)
 router.post('/users/', usercontroller.createUser)
 router.put('/users/:id', usercontroller.updateUser)

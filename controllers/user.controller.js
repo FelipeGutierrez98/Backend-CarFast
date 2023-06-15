@@ -88,12 +88,12 @@ exports.createUser = async (req, res) => {
   //propiedad email y que busque email de arriba
   /* res.send({success: `created ${newUser}`}) */
 }
-
 exports.updateUser = (req, res) => {
   const { id } = req.params
-  const { userName, email, password } = req.body //desestructurar
+  console.log(req.headers, 'THIS IS HEADERS')
+  const { userName, lastname, cellphone } = req.body //desestructurar
   userModel
-    .findByIdAndUpdate(id, { userName, email, password }, { new: true }) //metodo mongose
+    .findByIdAndUpdate(id, { userName, lastname, cellphone }, { new: true }) //metodo mongose
     .then(user => {
       if (!user) throw new Error(`user with id ${id} not found`)
       res.status(200).json(user)
