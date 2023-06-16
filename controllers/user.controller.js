@@ -12,7 +12,19 @@ exports.getAllUsers = (req, res) => {
     .catch(err => res.status(500).json({ message: 'An error has ocurred.', err }))
 }
 exports.getUser = (req, res) => {
-  const { id } = req.params
+  const { authorization } = req.headers
+
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Acceso denegado' })
+  }
+
+  const token = authorization.split(' ')[1]
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+
+  if (!decodedToken || !decodedToken.id) {
+    return res.status(401).json({ message: 'Token invalido' })
+  }
+  const { id } = decodedToken
   userModel
     .findById(id) //llamarlos
     .then(user => res.status(201).json(user)) //user cree parametro para guardar informacion
@@ -89,9 +101,23 @@ exports.createUser = async (req, res) => {
   /* res.send({success: `created ${newUser}`}) */
 }
 exports.updateUser = (req, res) => {
-  const { id } = req.params
-  console.log(req.headers, 'THIS IS HEADERS')
+  // const { id } = req.params
+  const { authorization } = req.headers
   const { userName, lastname, cellphone } = req.body //desestructurar
+
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Acceso denegado' })
+  }
+
+  const token = authorization.split(' ')[1]
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+
+  if (!decodedToken || !decodedToken.id) {
+    return res.status(401).json({ message: 'Token invalido' })
+  }
+
+  const { id } = decodedToken
+
   userModel
     .findByIdAndUpdate(id, { userName, lastname, cellphone }, { new: true }) //metodo mongose
     .then(user => {
@@ -101,12 +127,25 @@ exports.updateUser = (req, res) => {
     .catch(err => res.status(500).json({ message: 'An error has ocurred.', err }))
 }
 exports.deleteUser = (req, res) => {
-  const { id } = req.params
+  const { authorization } = req.headers
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Acceso denegado' })
+  }
+
+  const token = authorization.split(' ')[1]
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+
+  if (!decodedToken || !decodedToken.id) {
+    return res.status(401).json({ message: 'Token invalido' })
+  }
+
+  const { id } = decodedToken
   userModel
     .findByIdAndDelete(id)
     .then(user => {
+      console.log(user, 'User')
       if (!user) throw new Error(`user with id ${id} not found`)
-      res.status(404).json({ message: 'user deleted' })
+      res.status(200).json({ message: 'user deleted' })
     })
     .catch(err => res.status(500).json({ message: 'An error has ocurred.', err }))
 }
